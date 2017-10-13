@@ -5,6 +5,7 @@ const Cryptiles = require('cryptiles');
 const Blacklist = require('express-jwt-blacklist');
 const Bcrypt = require('bcrypt');
 const Boom = require('boom');
+const _ = require('lodash');
 
 const login = function (user, reply) {
     const obj = { id: user.id, username: user.username };
@@ -17,10 +18,12 @@ const login = function (user, reply) {
 
 exports.register = async function (request, reply) {
     const userRepository = request.getManager().getRepository('User');
-    userRepository.save({
-        username: request.payload.username,
-        password: await Bcrypt.hash(request.payload.password, 10)
-    }).then((user) => {
+    const payload = _.transform(request.payload, (result, value, key) => {
+        result[_.camelCase(key)] = value;
+    }, {});
+    payload.password = await Bcrypt.hash(payload.password, 10);
+
+    userRepository.save(payload).then((user) => {
         login(user, reply);
     }).catch((error) => {
         if (error.constraint === 'user_username_idx') {
