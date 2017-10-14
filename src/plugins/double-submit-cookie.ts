@@ -7,7 +7,7 @@ const Hoek = require('hoek');
 const Joi = require('joi');
 
 // Declare internals
-const internals = {};
+const internals: any = {};
 
 internals.schema = Joi.object().keys({
     key: Joi.string().optional(),
@@ -19,7 +19,7 @@ internals.defaults = {
     skip: false // Set to a function which returns true when to skip dsc generation and validation
 };
 
-exports.register = function (server, options, next) {
+export const register = function (server, options, next) {
 
     const validateOptions = internals.schema.validate(options);
     if (validateOptions.error) {
@@ -77,7 +77,7 @@ exports.register = function (server, options, next) {
     return next();
 };
 
-exports.register.attributes = {
+(<any>register).attributes = {
     'name': 'hapi-double-submit-cookie',
     'version': '1.0.0'
 };

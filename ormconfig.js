@@ -1,7 +1,5 @@
 'use strict';
 
-const Glob = require('glob');
-
 require('dotenv-safe').load({ allowEmptyValues: true });
 
 module.exports = {
@@ -14,13 +12,18 @@ module.exports = {
     synchronize: false,
     logging: process.env.NODE_ENV === 'development',
     migrationsRun: true,
-    entitySchemas: [
-        ...Glob.sync('./src/entities/**/*.js').map(require)
+    entities: [
+        'src/entities/**/*.ts'
     ],
     migrations: [
-        './src/migrations/**/*.js'
+        'src/migrations/**/*.ts'
     ],
     subscribers: [
-        'src/subscriber/**/*.js'
-    ]
+        'src/subscriberes/**/*.ts'
+    ],
+    cli: {
+        entitiesDir: 'src/entities',
+        migrationsDir: 'src/migrations',
+        subscribersDir: 'src/subscriberes'
+    }
 };

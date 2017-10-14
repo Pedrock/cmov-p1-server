@@ -72,7 +72,7 @@ const options = {
     relativeTo: __dirname
 };
 
-const startServer = (callback) => {
+const startServer = (callback?) => {
     Glue.compose(manifest, options, (err, server) => {
         if (err) {
             throw err;

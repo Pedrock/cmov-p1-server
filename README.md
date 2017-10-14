@@ -18,3 +18,14 @@ npm run dev
 ```
 
 In order to setup the Let's Encrypt SSL certificates edit docker-compose.yml, replacing *EXAMPLE.COM* with your website domain and *EMAIL@EXAMPLE.COM* with your email address.
+
+### TypeORM
+
+In order to run typeorm commands, use the *npm run orm* script.
+For example:
+
+```npm run orm -- --help```
+
+```npm run orm -- schema:drop```
+
+```npm run orm -- migrations:generate -n test```
