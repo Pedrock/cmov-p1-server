@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv-safe').load({ allowEmptyValues: true });
+require('reflect-metadata');
 
 const Glue = require('glue');
 
@@ -71,18 +72,30 @@ const options = {
     relativeTo: __dirname
 };
 
-Glue.compose(manifest, options, (err, server) => {
-    if (err) {
-        throw err;
-    }
-
-    server.state('token', { isSecure: process.env.NODE_ENV === 'production' });
-    server.state('jwtid', { isSecure: process.env.NODE_ENV === 'production' });
-
-    server.start( (err) => {
+const startServer = (callback) => {
+    Glue.compose(manifest, options, (err, server) => {
         if (err) {
             throw err;
         }
-        console.log('Server running at:', server.info.uri);
+
+        server.state('token', { isSecure: process.env.NODE_ENV === 'production' });
+        server.state('jwtid', { isSecure: process.env.NODE_ENV === 'production' });
+
+        if (callback) {
+            callback(server);
+        } else {
+            server.start((err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log('Server running at:', server.info.uri);
+            });
+        }
     });
-});
+};
+
+if (!module.parent) {
+    startServer();
+} else {
+    module.exports = () => new Promise(startServer);
+}

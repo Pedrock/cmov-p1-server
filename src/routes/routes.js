@@ -15,25 +15,6 @@ module.exports = {
                     handler: Handlers.register,
                     validate: Schema.register
                 }
-            },
-            {
-                method: 'POST',
-                path: '/login',
-                config: {
-                    tags: ['api'],
-                    plugins: { dsc: false }, // Disable double submit cookies for this route
-                    handler: Handlers.login,
-                    validate: Schema.login
-                }
-            },
-            {
-                method: 'POST',
-                path: '/logout',
-                config: {
-                    tags: ['api'],
-                    auth: 'jwt',
-                    handler: Handlers.logout
-                }
             }
         ]);
         next();

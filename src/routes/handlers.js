@@ -1,30 +1,17 @@
 'use strict';
 
-const JWT = require('jsonwebtoken');
-const Cryptiles = require('cryptiles');
-const Blacklist = require('express-jwt-blacklist');
-const Bcrypt = require('bcrypt');
 const Boom = require('boom');
-const _ = require('lodash');
-
-const login = function (user, reply) {
-    const obj = { id: user.id, username: user.username };
-    const jwtid = Cryptiles.randomString(64);
-    const token = JWT.sign(obj, process.env.JWT_SECRET, { jwtid });
-    return reply(token)
-        .state('token', token, { path: '/' })
-        .state('jwtid', jwtid, { path: '/', isHttpOnly: false });
-};
+const { camelCaseObject } = require('./utils');
 
 exports.register = async function (request, reply) {
     const userRepository = request.getManager().getRepository('User');
-    const payload = _.transform(request.payload, (result, value, key) => {
-        result[_.camelCase(key)] = value;
-    }, {});
-    payload.password = await Bcrypt.hash(payload.password, 10);
+    const payload = camelCaseObject(request.payload);
 
     userRepository.save(payload).then((user) => {
-        login(user, reply);
+        reply({
+            id: user.id,
+            token: user.token
+        });
     }).catch((error) => {
         if (error.constraint === 'user_username_idx') {
             reply(Boom.conflict('Username already in use'));
@@ -32,26 +19,4 @@ exports.register = async function (request, reply) {
             reply(error);
         }
     });
-};
-
-exports.login = function (request, reply) {
-    const userRepository = request.getManager().getRepository('User');
-    userRepository.findOne({ username: request.payload.username })
-        .then(async (user) => {
-            if (!user) {
-                throw Boom.forbidden('Invalid username/password');
-            }
-            const success = await Bcrypt.compare(request.payload.password, user.password);
-            if (!success) {
-                throw Boom.forbidden('Invalid username/password');
-            }
-            login(user, reply);
-        })
-        .catch(reply);
-};
-
-exports.logout = function (request, reply) {
-    console.log(request.auth.credentials);
-    Blacklist.revoke(request.auth.credentials);
-    return reply();
 };

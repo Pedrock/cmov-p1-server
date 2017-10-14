@@ -5,32 +5,26 @@ module.exports = {
     columns: {
         id: {
             primary: true,
-            type: 'int',
-            generated: true
-        },
-        username: {
-            type: 'varchar'
-        },
-        password: {
-            type: 'varchar'
+            type: 'uuid',
+            default: () => 'gen_random_uuid()'
         },
         name: {
-            type: 'varchar'
+            type: 'text'
         },
         address: {
             type: 'text'
         },
         fiscalNumber: {
             name: 'fiscal_number',
-            type: 'varchar'
+            type: 'text'
         },
         creditCardType: {
             name: 'credit_card_type',
-            type: 'varchar'
+            type: 'text'
         },
         creditCardNumber: {
             name: 'credit_card_number',
-            type: 'varchar'
+            type: 'text'
         },
         creditCardExpiration: {
             name: 'credit_card_expiration',
@@ -38,11 +32,11 @@ module.exports = {
         },
         creditCardCvv: {
             name: 'credit_card_cvv',
-            type: 'varchar'
+            type: 'text'
         },
         publicKey: {
             name: 'public_key',
-            type: 'varchar'
+            type: 'text'
         }
     }
 };
