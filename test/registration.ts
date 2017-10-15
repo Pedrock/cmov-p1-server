@@ -1,6 +1,6 @@
 'use strict';
 
-const Lab = require('lab');
+import * as Lab from 'lab';
 const lab = exports.lab = Lab.script();
 
 const describe = lab.describe;
@@ -21,20 +21,19 @@ const requestDefaults = {
         credit_card_number: '341116922703147',
         credit_card_expiration: '2018-02',
         credit_card_cvv: '123',
-        public_key: 'XXXXX'
+        public_key: 'key'
     }
 };
 
-describe('math', async () => {
+describe('registration:', async () => {
 
     before(async () => {
         server = await require('../src/server')();
     });
 
-    it('returns true when 1 + 1 equals 2', async () => {
+    it('user is registered', async () => {
         const request = { ...requestDefaults };
-        const { statusCode, result } = await server.inject(request);
-        console.log(result);
+        const { statusCode } = await server.inject(request);
         expect(statusCode).to.equal(200);
     });
 });

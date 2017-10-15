@@ -11,7 +11,6 @@ module.exports = {
                 path: '/register',
                 config: {
                     tags: ['api'],
-                    plugins: { dsc: false }, // Disable double submit cookies for this route
                     handler: Handlers.register,
                     validate: Schema.register
                 }
@@ -23,6 +22,16 @@ module.exports = {
                     tags: ['api'],
                     handler: Handlers.getProduct,
                     validate: Schema.getProduct
+                }
+            },
+            {
+                method: 'POST',
+                path: '/cart',
+                config: {
+                    tags: ['api'],
+                    auth: 'token',
+                    handler: Handlers.postCart,
+                    validate: Schema.postCart
                 }
             }
         ]);

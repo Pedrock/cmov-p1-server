@@ -38,7 +38,6 @@ const manifest = {
                 options: { showAuth: true }
             }
         },
-        { plugin: './plugins/double-submit-cookie' },
         {
             plugin: {
                 register: 'good',

@@ -19,3 +19,10 @@ export const getProduct = {
         barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode')
     }).xor('id', 'barcode')
 };
+
+export const postCart = {
+    payload: {
+        list: Joi.string().required(),
+        signature: (<any>Joi.string()).base64().required()
+    }
+};
