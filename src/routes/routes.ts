@@ -1,7 +1,7 @@
 'use strict';
 
-const Handlers = require('./handlers');
-const Schema = require('./schema');
+import * as Handlers from './handlers';
+import * as Schema from './schema';
 
 module.exports = {
     register: function (server, options, next) {
@@ -14,6 +14,15 @@ module.exports = {
                     plugins: { dsc: false }, // Disable double submit cookies for this route
                     handler: Handlers.register,
                     validate: Schema.register
+                }
+            },
+            {
+                method: 'GET',
+                path: '/product',
+                config: {
+                    tags: ['api'],
+                    handler: Handlers.getProduct,
+                    validate: Schema.getProduct
                 }
             }
         ]);

@@ -5,14 +5,14 @@ export class Product {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ unique: true })
     barcode: string;
 
     @Column()
     name: string;
 
-    @Column({ type: 'money' })
-    price: number;
+    @Column('decimal', { precision: 12, scale: 2 })
+    price: string;
 
     @Column()
     maker: string;

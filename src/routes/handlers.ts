@@ -3,11 +3,12 @@
 import * as Boom from 'boom';
 import { Repository } from 'typeorm';
 import { User } from '../entities/User';
+import {Product} from '../entities/Product';
 
 const { camelCaseObject } = require('./utils');
 
 export const register = async function (request, reply) {
-    const userRepository: Repository<User> = request.getManager().getRepository('User');
+    const userRepository: Repository<User> = request.getManager().getRepository(User);
     const payload = camelCaseObject(request.payload);
 
     userRepository.createQueryBuilder('user')
@@ -28,4 +29,14 @@ export const register = async function (request, reply) {
                 reply(error);
             }
         });
+};
+
+export const getProduct = async function (request, reply) {
+    const productRepository: Repository<Product> = request.getManager().getRepository(Product);
+    productRepository.findOne(request.query)
+        .then(product => {
+            if (!product) throw Boom.notFound('Product not found');
+            return product;
+        })
+        .then(reply, reply);
 };

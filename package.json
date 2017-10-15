@@ -4,11 +4,12 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "start": "cross-env NODE_ENV=production ts-node src/server.ts",
+    "start": "cross-env NODE_ENV=production ts-node --fast src/server.ts",
     "dev": "cross-env NODE_ENV=development nodemon",
     "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript --ignore typeormMetadataArgsStorage",
-    "orm": "ts-node ./node_modules/typeorm/cli.js",
-    "build": "exit 0"
+    "orm": "ts-node --fast ./node_modules/typeorm/cli.js",
+    "build": "exit 0",
+    "seed": "ts-node --fast seed.ts"
   },
   "author": "",
   "license": "ISC",
@@ -41,6 +42,8 @@
     "vision": "^4.1.1"
   },
   "devDependencies": {
+    "@types/boom": "^4.3.7",
+    "@types/hapi": "^16.1.10",
     "@types/node": "^8.0.34",
     "eslint": "^4.8.0",
     "eslint-config-hapi": "^10.1.0",

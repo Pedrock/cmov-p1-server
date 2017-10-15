@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-exports.register = {
+export const register = {
     payload: {
         name: Joi.string().required(),
         address: Joi.string().required(),
@@ -11,4 +11,11 @@ exports.register = {
         credit_card_cvv: Joi.string().regex(/^[0-9]{3}$/, 'CVV').required(),
         public_key: Joi.string().required()
     }
+};
+
+export const getProduct = {
+    query: Joi.object().keys({
+        id: Joi.number().integer(),
+        barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode')
+    }).xor('id', 'barcode')
 };
