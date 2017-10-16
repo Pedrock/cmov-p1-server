@@ -34,6 +34,15 @@ module.exports = {
             },
             {
                 method: 'GET',
+                path: '/purchase/list',
+                config: {
+                    tags: ['api'],
+                    auth: 'user',
+                    handler: Handlers.getPurchases,
+                }
+            },
+            {
+                method: 'GET',
                 path: '/admin/purchase/{token}',
                 config: {
                     tags: ['api'],

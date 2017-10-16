@@ -111,3 +111,8 @@ export const getPurchase = async function(request, reply) {
         .then(reply, reply);
 };
 
+export const getPurchases = async function(request, reply) {
+    const user: User = request.auth.credentials.user;
+    const purchases = await user.purchases;
+    reply(purchases);
+};
