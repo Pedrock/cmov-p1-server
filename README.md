@@ -31,7 +31,7 @@ In order to setup the Let's Encrypt SSL certificates edit docker-compose.yml, re
 
 ### TypeORM
 
-In order to run typeorm commands, use the *npm run orm* script.
+In order to run typeorm cli commands, use the *npm run orm* script.
 For example:
 
 ```npm run orm -- --help```
@@ -39,3 +39,16 @@ For example:
 ```npm run orm -- schema:drop```
 
 ```npm run orm -- migrations:generate -n test```
+
+
+### Seeds
+In order to execute the database seeds when running Node.js in a container run:
+
+```
+docker exec -t cmov-api npm run seed
+```
+
+For a local environment use:
+```
+npm run seed
+```

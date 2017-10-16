@@ -22,6 +22,7 @@ const list = '[{"barcode": "12853478357", "quantity": 3}]';
 let server: Server;
 let signature: string;
 let userToken;
+let purchaseToken;
 
 describe('buying:', async () => {
 
@@ -34,7 +35,7 @@ describe('buying:', async () => {
         signature = sign.sign(privateKey, 'base64');
 
         const { result } = await server.inject(registrationRequest);
-        userToken = (<any>result).id;
+        userToken = (<any>result).token;
     });
 
     it('can buy', async () => {
@@ -44,9 +45,21 @@ describe('buying:', async () => {
             payload: { list, signature },
             headers: { Authorization: userToken }
         };
+        const { statusCode, payload, result } = await server.inject(request);
+        expect(statusCode).to.equal(200);
+        purchaseToken = (<any>result).token;
+        expect(Object.keys(JSON.parse(payload))).to.equal(['id', 'token', 'products', 'total', 'date']);
+    });
+
+    it('purchase is available', async () => {
+        const request = {
+            method: 'GET',
+            url: `/api/admin/purchase/${purchaseToken}`,
+            headers: { Authorization: process.env.ADMIN_TOKEN }
+        };
         const { statusCode, payload } = await server.inject(request);
         expect(statusCode).to.equal(200);
-        console.log(JSON.parse(payload));
+        expect(Object.keys(JSON.parse(payload))).to.equal(['id', 'token', 'products', 'total', 'date', 'user']);
     });
 
 });

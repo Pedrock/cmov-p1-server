@@ -8,8 +8,8 @@ export const register = function register(server, options, next) {
         return {
             authenticate: async function (request, reply) {
                 const req = request.raw.req;
-                const authorization = req.headers.authorization;
-                if (!authorization || authorization !== process.env.ADMIN_TOKEN) {
+                const token = req.headers.authorization;
+                if (!token || token !== process.env.ADMIN_TOKEN) {
                     return reply(Boom.unauthorized(null, 'token'));
                 }
                 return reply.continue({ credentials: { roles: ['admin'] } });
@@ -21,12 +21,12 @@ export const register = function register(server, options, next) {
         return {
             authenticate: async function (request, reply) {
                 const req = request.raw.req;
-                const authorization = req.headers.authorization;
-                if (!authorization) {
+                const token = req.headers.authorization;
+                if (!token) {
                     return reply(Boom.unauthorized(null, 'token'));
                 }
                 const userRepository: Repository<User> = request.getManager().getRepository(User);
-                const user = await userRepository.findOneById(authorization).catch(() => null);
+                const user = await userRepository.findOne({ token }).catch(() => null);
                 if (!user) {
                     return reply(Boom.unauthorized('Invalid token', 'token'));
                 }

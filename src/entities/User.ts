@@ -1,10 +1,13 @@
-import {Entity, Column, PrimaryColumn, OneToMany} from 'typeorm';
+import {Entity, Column, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {Purchase} from './Purchase';
 
 @Entity()
 export class User {
-    @PrimaryColumn({ type: 'uuid', default: () => 'gen_random_uuid()' })
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column('uuid', { unique: true, default: () => 'gen_random_uuid()' })
+    token: string;
 
     @Column()
     name: string;

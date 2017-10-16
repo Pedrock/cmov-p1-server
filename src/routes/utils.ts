@@ -31,5 +31,5 @@ export const processPayment = async function(request: Request, products: Product
         .values({ user: <any>(user.id), products, total })
         .returning('*')
         .execute()
-        .then(([purchase]) => _.pick(purchase, ['id', 'products', 'total', 'date']));
+        .then(([purchase]) => _.pick(purchase, ['id', 'token', 'products', 'total', 'date']));
 };

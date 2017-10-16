@@ -6,6 +6,7 @@ import * as Joi from 'joi';
 import * as Crypto from 'crypto';
 import { Verify } from 'crypto';
 import * as Big from 'big.js';
+import * as _ from 'lodash';
 import { User } from '../entities/User';
 import { Product } from '../entities/Product';
 import {camelCaseObject, processPayment} from './utils';
@@ -24,7 +25,7 @@ export const register = async function (request, reply) {
             if (!user) {
                 throw Boom.internal();
             }
-            reply({ id: user.id });
+            reply(_.pick(user, ['id', 'token']));
         })
         .catch((error) => {
             if (error.constraint === 'user_username_idx') {
@@ -98,7 +99,7 @@ export const getPurchase = async function(request, reply) {
     purchaseRepository
         .createQueryBuilder('purchase')
         .select()
-        .addSelect(['user.name', 'user.address', 'user.fiscalNumber'])
+        .addSelect(['user.id', 'user.name', 'user.address', 'user.fiscalNumber'])
         .leftJoin('purchase.user', 'user')
         .getOne()
         .then((purchase) => {

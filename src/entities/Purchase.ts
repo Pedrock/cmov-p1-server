@@ -3,8 +3,11 @@ import {User} from './User';
 
 @Entity()
 export class Purchase {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column('uuid', { unique: true, default: () => 'uuid_generate_v4()' })
+    token: string;
 
     @ManyToOne(type => User, user => user.purchases)
     user: User;
