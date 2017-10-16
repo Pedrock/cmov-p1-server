@@ -23,9 +23,15 @@ export const getProduct = {
     }).xor('id', 'barcode')
 };
 
-export const postCart = {
+export const postPurchase = {
     payload: {
         list: Joi.string().required(),
         signature: (<any>Joi.string()).base64().required()
     }
+};
+
+export const getPurchase = {
+    params: Joi.object().keys({
+        token: Joi.string().uuid('uuidv4')
+    })
 };

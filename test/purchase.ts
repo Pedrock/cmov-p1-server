@@ -2,7 +2,7 @@
 import * as Crypto from 'crypto';
 import * as Lab from 'lab';
 import {Server} from 'hapi';
-import {registrationRequest} from './registration';
+import {registrationRequest} from './register';
 
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
@@ -40,7 +40,7 @@ describe('buying:', async () => {
     it('can buy', async () => {
         const request = {
             method: 'POST',
-            url: '/api/cart',
+            url: '/api/purchase',
             payload: { list, signature },
             headers: { Authorization: userToken }
         };

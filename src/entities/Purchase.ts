@@ -16,5 +16,5 @@ export class Purchase {
     total: string;
 
     @CreateDateColumn()
-    createdDate: Date;
+    date: Date;
 }

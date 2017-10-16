@@ -24,12 +24,22 @@ module.exports = {
             },
             {
                 method: 'POST',
-                path: '/cart',
+                path: '/purchase',
                 config: {
                     tags: ['api'],
-                    auth: 'token',
-                    handler: Handlers.postCart,
-                    validate: Schema.postCart
+                    auth: 'user',
+                    handler: Handlers.postPurchase,
+                    validate: Schema.postPurchase
+                }
+            },
+            {
+                method: 'GET',
+                path: '/admin/purchase/{token}',
+                config: {
+                    tags: ['api'],
+                    auth: 'admin',
+                    handler: Handlers.getPurchase,
+                    validate: Schema.getPurchase
                 }
             }
         ]);

@@ -4,7 +4,20 @@ import {Repository} from 'typeorm';
 
 export const register = function register(server, options, next) {
 
-    const scheme = function (server, options) {
+    const adminScheme = function (server, options) {
+        return {
+            authenticate: async function (request, reply) {
+                const req = request.raw.req;
+                const authorization = req.headers.authorization;
+                if (!authorization || authorization !== process.env.ADMIN_TOKEN) {
+                    return reply(Boom.unauthorized(null, 'token'));
+                }
+                return reply.continue({ credentials: { roles: ['admin'] } });
+            }
+        };
+    };
+
+    const userScheme = function (server, options) {
         return {
             authenticate: async function (request, reply) {
                 const req = request.raw.req;
@@ -22,8 +35,10 @@ export const register = function register(server, options, next) {
         };
     };
 
-    server.auth.scheme('token', scheme);
-    server.auth.strategy('token', 'token');
+    server.auth.scheme('user', userScheme);
+    server.auth.strategy('user', 'user');
+    server.auth.scheme('admin', adminScheme);
+    server.auth.strategy('admin', 'admin');
     next();
 };
 

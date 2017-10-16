@@ -9,6 +9,7 @@ import * as Big from 'big.js';
 import { User } from '../entities/User';
 import { Product } from '../entities/Product';
 import {camelCaseObject, processPayment} from './utils';
+import {Purchase} from '../entities/Purchase';
 
 export const register = async function (request, reply) {
     const userRepository: Repository<User> = request.getManager().getRepository(User);
@@ -44,7 +45,7 @@ export const getProduct = async function (request, reply) {
         .then(reply, reply);
 };
 
-export const postCart = async function (request, reply) {
+export const postPurchase = async function (request, reply) {
     const listSchema = Joi.array().items({
         barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode').required(),
         quantity: Joi.number().integer().positive().required()
@@ -91,3 +92,21 @@ export const postCart = async function (request, reply) {
     processPayment(request, products, total)
         .then(reply, reply);
 };
+
+export const getPurchase = async function(request, reply) {
+    const purchaseRepository: Repository<Purchase> = request.getManager().getRepository(Purchase);
+    purchaseRepository
+        .createQueryBuilder('purchase')
+        .select()
+        .addSelect(['user.name', 'user.address', 'user.fiscalNumber'])
+        .leftJoin('purchase.user', 'user')
+        .getOne()
+        .then((purchase) => {
+            if (!purchase) {
+                return Boom.notFound('Purchase not found');
+            }
+            return purchase;
+        })
+        .then(reply, reply);
+};
+

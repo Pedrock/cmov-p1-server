@@ -32,14 +32,12 @@ const manifest = {
                 }
             }
         } },
-        {
-            plugin: {
+        { plugin: {
                 register: 'blipp',
                 options: { showAuth: true }
             }
         },
-        {
-            plugin: {
+        { plugin: {
                 register: 'good',
                 options: {
                     reporters: {
@@ -58,8 +56,7 @@ const manifest = {
                 }
             }
         },
-        {
-            plugin: {
+        { plugin: {
                 register: './routes/routes',
                 routes: { prefix: '/api' }
             }
