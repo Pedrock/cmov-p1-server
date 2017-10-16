@@ -2,6 +2,7 @@
 import * as Crypto from 'crypto';
 import * as Lab from 'lab';
 import {Server} from 'hapi';
+import {registrationRequest} from './registration';
 
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
@@ -16,30 +17,24 @@ rRGp3Ck0Zr+6o/H5AhgA7NpmqNHU/Vwc5XX0/wyz+W4DtEjSgs0CGADLfB2InqRz
 aPZ/6vi4X3vp2xXRq7ViLwIYAMWazO1p6u3aLM2P5O/pFDo0e+isnNy9Ahc5Igsk
 ze48nU8A0ZeuJNkk6yewLDcMbwIXAhGbpJQZ7KWBpH6SOOiZ2m556dhxaLg=
 -----END RSA PRIVATE KEY-----`;
-const publicKey = `-----BEGIN PUBLIC KEY-----
-MEowDQYJKoZIhvcNAQEBBQADOQAwNgIvALxEBIS8mCOUi/Gf8b2/URBkakw2um8q
-LTUGy2JnwZAaui5yM7KTJrBmjF6pfaMCAwEAAQ==
------END PUBLIC KEY-----`;
-const list = '[{"barcode": "12345678901", "quantity": 1}]';
-
-const credentials = {
-    user: {
-        token: 'test_token',
-        publicKey
-    }
-};
+const list = '[{"barcode": "12853478357", "quantity": 3}]';
 
 let server: Server;
 let signature: string;
+let userToken;
 
 describe('buying:', async () => {
 
     before(async () => {
         server = await require('../src/server')();
+        server.settings.app.purchaseFailureRate = 0;
 
         const sign = Crypto.createSign('RSA-SHA1');
         sign.update(list);
         signature = sign.sign(privateKey, 'base64');
+
+        const { result } = await server.inject(registrationRequest);
+        userToken = (<any>result).id;
     });
 
     it('can buy', async () => {
@@ -47,9 +42,11 @@ describe('buying:', async () => {
             method: 'POST',
             url: '/api/cart',
             payload: { list, signature },
-            credentials
+            headers: { Authorization: userToken }
         };
-        const { statusCode } = await server.inject(request);
+        const { statusCode, payload } = await server.inject(request);
         expect(statusCode).to.equal(200);
+        console.log(JSON.parse(payload));
     });
+
 });

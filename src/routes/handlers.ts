@@ -5,10 +5,10 @@ import { Repository } from 'typeorm';
 import * as Joi from 'joi';
 import * as Crypto from 'crypto';
 import { Verify } from 'crypto';
+import * as Big from 'big.js';
 import { User } from '../entities/User';
 import { Product } from '../entities/Product';
-
-const { camelCaseObject } = require('./utils');
+import {camelCaseObject, processPayment} from './utils';
 
 export const register = async function (request, reply) {
     const userRepository: Repository<User> = request.getManager().getRepository(User);
@@ -65,5 +65,29 @@ export const postCart = async function (request, reply) {
     if (!valid) {
         return reply(Boom.badRequest('Signature doesn\'t match shopping list'));
     }
-    reply(list);
+
+    const barcodes = list.map(item => item.barcode);
+
+    const productRepository: Repository<Product> = request.getManager().getRepository(Product);
+    const products = await productRepository
+        .createQueryBuilder('product')
+        .where("barcode IN (:barcodes)", { barcodes })
+        .getMany();
+
+    if (products.length !== barcodes.length) {
+        return reply(Boom.badData('Some of the products could not be found'));
+    }
+
+    const quantities: Map<string, number> = new Map();
+    list.forEach(item => quantities.set(item.barcode, item.quantity));
+
+    let total = Big(0);
+    for (const product of products) {
+        (<any>product).quantity = quantities.get(product.barcode);
+        total = total.plus(Big(product.price).times((<any>product).quantity));
+    }
+    total = total.toString();
+
+    processPayment(request, products, total)
+        .then(reply, reply);
 };

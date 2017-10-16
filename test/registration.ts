@@ -10,7 +10,12 @@ const expect = Lab.expect;
 
 let server;
 
-const requestDefaults = {
+const publicKey = `-----BEGIN PUBLIC KEY-----
+MEowDQYJKoZIhvcNAQEBBQADOQAwNgIvALxEBIS8mCOUi/Gf8b2/URBkakw2um8q
+LTUGy2JnwZAaui5yM7KTJrBmjF6pfaMCAwEAAQ==
+-----END PUBLIC KEY-----`;
+
+export const registrationRequest = {
     method: 'POST',
     url: '/api/register',
     payload: {
@@ -21,7 +26,7 @@ const requestDefaults = {
         credit_card_number: '341116922703147',
         credit_card_expiration: '2018-02',
         credit_card_cvv: '123',
-        public_key: 'key'
+        public_key: publicKey
     }
 };
 
@@ -32,8 +37,7 @@ describe('registration:', async () => {
     });
 
     it('user is registered', async () => {
-        const request = { ...requestDefaults };
-        const { statusCode } = await server.inject(request);
+        const { statusCode } = await server.inject(registrationRequest);
         expect(statusCode).to.equal(200);
     });
 });

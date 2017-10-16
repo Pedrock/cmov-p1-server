@@ -1,4 +1,5 @@
-import {Entity, Column, PrimaryColumn} from 'typeorm';
+import {Entity, Column, PrimaryColumn, OneToMany} from 'typeorm';
+import {Purchase} from './Purchase';
 
 @Entity()
 export class User {
@@ -20,7 +21,7 @@ export class User {
     @Column()
     creditCardNumber: string;
 
-    @Column()
+    @Column('date')
     creditCardExpiration: string;
 
     @Column()
@@ -28,4 +29,7 @@ export class User {
 
     @Column()
     publicKey: string;
+
+    @OneToMany(type => Purchase, purchase => purchase.user)
+    purchases: Promise<Purchase[]>;
 }

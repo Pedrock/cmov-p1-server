@@ -77,6 +77,10 @@ const startServer = (callback?) => {
             throw err;
         }
 
+        server.settings.app = {
+            purchaseFailureRate: 0.05
+        };
+
         server.state('token', { isSecure: process.env.NODE_ENV === 'production' });
         server.state('jwtid', { isSecure: process.env.NODE_ENV === 'production' });
 

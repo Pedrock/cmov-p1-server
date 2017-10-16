@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^1.0.3",
+    "big.js": "^5.0.2",
     "blipp": "^2.3.0",
     "boom": "^6.0.0",
     "cross-env": "^5.0.5",
@@ -32,8 +33,10 @@
     "hoek": "^5.0.0",
     "inert": "^4.2.1",
     "joi": "^11.3.2",
+    "joi-date-extensions": "^1.1.0",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
+    "moment": "^2.19.1",
     "pg": "^7.3.0",
     "redis": "^2.8.0",
     "reflect-metadata": "^0.1.10",
@@ -45,12 +48,14 @@
     "@types/boom": "^4.3.7",
     "@types/hapi": "^16.1.10",
     "@types/node": "^8.0.34",
+    "@types/sinon": "^2.3.6",
     "eslint": "^4.8.0",
     "eslint-config-hapi": "^10.1.0",
     "eslint-plugin-hapi": "^4.0.0",
     "lab": "^14.3.1",
     "lab-transform-typescript": "^3.0.1",
     "nodemon": "^1.12.1",
+    "sinon": "^4.0.1",
     "tslint": "^5.7.0",
     "typescript": "^2.5.3"
   }
