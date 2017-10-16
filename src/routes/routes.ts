@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Handlers from './handlers';
 import * as Schema from './schema';
 

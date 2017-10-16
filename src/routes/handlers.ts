@@ -71,7 +71,7 @@ export const postCart = async function (request, reply) {
     const productRepository: Repository<Product> = request.getManager().getRepository(Product);
     const products = await productRepository
         .createQueryBuilder('product')
-        .where("barcode IN (:barcodes)", { barcodes })
+        .where('barcode IN (:barcodes)', { barcodes })
         .getMany();
 
     if (products.length !== barcodes.length) {
