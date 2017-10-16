@@ -31,5 +31,5 @@ export const processPayment = async function(request: Request, products: Product
         .values({ user: <any>(user.id), products, total })
         .returning('*')
         .execute()
-        .then(([{ id, products, total }]) => ({ id, products, total }));
+        .then(([{ id, products, total, createdDate: date }]) => ({ id, products, total, date }));
 };

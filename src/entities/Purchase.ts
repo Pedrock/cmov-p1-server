@@ -1,4 +1,4 @@
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from 'typeorm';
+import {Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn} from 'typeorm';
 import {User} from './User';
 
 @Entity()
@@ -14,4 +14,7 @@ export class Purchase {
 
     @Column('decimal', { precision: 12, scale: 2 })
     total: string;
+
+    @CreateDateColumn()
+    createdDate: Date;
 }
