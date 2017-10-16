@@ -1,6 +1,7 @@
 'use strict';
 
 import * as Lab from 'lab';
+import * as _ from 'lodash';
 const lab = exports.lab = Lab.script();
 
 const describe = lab.describe;
@@ -39,5 +40,12 @@ describe('registration:', async () => {
     it('user is registered', async () => {
         const { statusCode } = await server.inject(registrationRequest);
         expect(statusCode).to.equal(200);
+    });
+
+    it('fails with invalid nif', async () => {
+        const { statusCode } = await server.inject(_.merge({}, registrationRequest, { payload: {
+            fiscal_number: '123456788',
+        }}));
+        expect(statusCode).to.equal(400);
     });
 });

@@ -1,11 +1,13 @@
 import * as BaseJoi from 'joi';
-const Joi = BaseJoi.extend(require('joi-date-extensions'));
+import * as JoiDateExtensions from 'joi-date-extensions';
+import JoiNifExtension from '../lib/joi-nif-extension';
+const Joi = BaseJoi.extend(<any>[JoiDateExtensions, JoiNifExtension]);
 
 export const register = {
     payload: {
         name: Joi.string().required(),
         address: Joi.string().required(),
-        fiscal_number: Joi.string().regex(/^[0-9]{9}$/, 'fiscal number').required(), // TODO - better validation
+        fiscal_number: Joi.string().nif().required(),
         credit_card_number: Joi.string().creditCard().required(),
         credit_card_type: Joi.string().valid('visa', 'mastercard', 'american express').required(),
         credit_card_expiration: Joi.date().format('YYYY-MM'),
