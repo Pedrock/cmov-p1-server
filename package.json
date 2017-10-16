@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production ts-node --fast src/server.ts",
     "dev": "cross-env NODE_ENV=development nodemon",
+    "docker:dev": "node ./docker-dev.js",
     "test": "lab --sourcemaps --transform node_modules/lab-transform-typescript --ignore typeormMetadataArgsStorage",
     "orm": "ts-node --fast ./node_modules/typeorm/cli.js",
     "build": "exit 0",

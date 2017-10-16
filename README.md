@@ -11,9 +11,19 @@ docker-compose down
 ```
 
 To run in development, install Node.js 8 and run:
+
+```
+npm run docker:dev
+```
+
+or
 ```
 docker-compose run -d -p 5432:5432 postgres
 docker-compose run -d -p 6379:6379 redis
+```
+
+and then run:
+```
 npm run dev
 ```
 
