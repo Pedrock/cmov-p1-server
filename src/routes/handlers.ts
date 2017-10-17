@@ -19,21 +19,15 @@ export const register = async function (request, reply) {
     userRepository.createQueryBuilder('user')
         .insert()
         .values(payload)
-        .returning('*')
+        .returning('id, token')
         .execute()
         .then(([user]) => {
             if (!user) {
                 throw Boom.internal();
             }
-            reply(_.pick(user, ['id', 'token']));
+            reply(user);
         })
-        .catch((error) => {
-            if (error.constraint === 'user_username_idx') {
-                reply(Boom.conflict('Username already in use'));
-            } else {
-                reply(error);
-            }
-        });
+        .catch(reply);
 };
 
 export const getProduct = async function (request, reply) {
@@ -113,6 +107,6 @@ export const getPurchase = async function(request, reply) {
 
 export const getPurchases = async function(request, reply) {
     const user: User = request.auth.credentials.user;
-    const purchases = await user.purchases;
+    const purchases = await user.purchases || [];
     reply(purchases);
 };
