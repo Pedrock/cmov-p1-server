@@ -44,7 +44,7 @@ export const postPurchase = async function (request, reply) {
     const listSchema = Joi.array().items({
         barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode').required(),
         quantity: Joi.number().integer().positive().required()
-    });
+    }).min(1);
 
     const { error, value: list } = listSchema.validate(request.payload.list);
     if (error) return reply(Boom.badRequest(<any>error));

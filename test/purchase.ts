@@ -20,19 +20,21 @@ ze48nU8A0ZeuJNkk6yewLDcMbwIXAhGbpJQZ7KWBpH6SOOiZ2m556dhxaLg=
 const list = '[{"barcode": "12853478357", "quantity": 3}]';
 
 let server: Server;
-let signature: string;
 let userToken;
 let purchaseToken;
+
+
+function signList(list) {
+    const sign = Crypto.createSign('RSA-SHA1');
+    sign.update(list);
+    return sign.sign(privateKey, 'base64');
+}
 
 describe('buying:', async () => {
 
     before(async () => {
         server = await require('../src/server')();
         server.settings.app.purchaseFailureRate = 0;
-
-        const sign = Crypto.createSign('RSA-SHA1');
-        sign.update(list);
-        signature = sign.sign(privateKey, 'base64');
 
         const { result } = await server.inject(registrationRequest);
         userToken = (<any>result).token;
@@ -42,13 +44,24 @@ describe('buying:', async () => {
         const request = {
             method: 'POST',
             url: '/api/purchase',
-            payload: { list, signature },
+            payload: { list, signature: signList(list) },
             headers: { Authorization: userToken }
         };
         const { statusCode, payload, result } = await server.inject(request);
         expect(statusCode).to.equal(200);
         purchaseToken = (<any>result).token;
         expect(Object.keys(JSON.parse(payload))).to.equal(['id', 'token', 'products', 'total', 'date']);
+    });
+
+    it('can not buy empty purchase', async () => {
+        const request = {
+            method: 'POST',
+            url: '/api/purchase',
+            payload: { list: '[]', signature: signList('[]') },
+            headers: { Authorization: userToken }
+        };
+        const { statusCode } = await server.inject(request);
+        expect(statusCode).to.equal(400);
     });
 
     it('purchase is available', async () => {
