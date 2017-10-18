@@ -17,7 +17,7 @@ rRGp3Ck0Zr+6o/H5AhgA7NpmqNHU/Vwc5XX0/wyz+W4DtEjSgs0CGADLfB2InqRz
 aPZ/6vi4X3vp2xXRq7ViLwIYAMWazO1p6u3aLM2P5O/pFDo0e+isnNy9Ahc5Igsk
 ze48nU8A0ZeuJNkk6yewLDcMbwIXAhGbpJQZ7KWBpH6SOOiZ2m556dhxaLg=
 -----END RSA PRIVATE KEY-----`;
-const list = '[{"barcode": "12853478357", "quantity": 3}]';
+const list = '[{"barcode": "12853478357", "quantity": 3}, {"barcode": "61234567890", "quantity": 1}]';
 
 let server: Server;
 let userToken;

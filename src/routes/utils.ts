@@ -28,7 +28,7 @@ export const processPayment = async function(request: Request, products: Product
     return purchaseRepository
         .createQueryBuilder('purchase')
         .insert()
-        .values({ user: <any>(user.id), products, total })
+        .values({ user: <any>(user.id), products: JSON.stringify(products), total })
         .returning('*')
         .execute()
         .then(([purchase]) => _.pick(purchase, ['id', 'token', 'products', 'total', 'date']));
