@@ -2,7 +2,7 @@
 import * as Crypto from 'crypto';
 import * as Lab from 'lab';
 import {Server} from 'hapi';
-import {registrationRequest} from './register';
+import {registrationRequest} from './auth';
 
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
@@ -36,7 +36,7 @@ describe('buying:', async () => {
         server = await require('../src/server')();
         server.settings.app.purchaseFailureRate = 0;
 
-        const { result } = await server.inject(registrationRequest);
+        const { result } = await server.inject(registrationRequest());
         userToken = (<any>result).token;
     });
 

@@ -6,7 +6,16 @@ module.exports = {
         server.route([
             {
                 method: 'POST',
-                path: '/register',
+                path: '/auth/login',
+                config: {
+                    tags: ['api'],
+                    handler: Handlers.login,
+                    validate: Schema.login
+                }
+            },
+            {
+                method: 'POST',
+                path: '/auth/register',
                 config: {
                     tags: ['api'],
                     handler: Handlers.register,

@@ -7,10 +7,36 @@ import * as Crypto from 'crypto';
 import { Verify } from 'crypto';
 import * as Big from 'big.js';
 import * as _ from 'lodash';
+import * as Bcrypt from 'bcrypt';
+import * as Cryptiles from 'cryptiles';
+import * as JWT from 'jsonwebtoken';
 import { User } from '../entities/User';
 import { Product } from '../entities/Product';
 import {camelCaseObject, processPayment} from './utils';
 import {Purchase} from '../entities/Purchase';
+
+const _login = function (user) {
+    const obj = _.pick(user, ['id', 'username']);
+    const jwtid = Cryptiles.randomString(64);
+    const token = JWT.sign(obj, process.env.JWT_SECRET, { jwtid });
+    return { token };
+};
+
+export const login = async function (request, reply) {
+    const userRepository = request.getManager().getRepository('User');
+    userRepository.findOne({ username: request.payload.username })
+        .then(async (user) => {
+            if (!user) {
+                throw Boom.forbidden('Invalid username/password');
+            }
+            const success = await Bcrypt.compare(request.payload.password, user.password);
+            if (!success) {
+                throw Boom.forbidden('Invalid username/password');
+            }
+            reply(_login(user));
+        })
+        .catch(reply);
+};
 
 export const register = async function (request, reply) {
     const userRepository: Repository<User> = request.getManager().getRepository(User);
@@ -18,14 +44,17 @@ export const register = async function (request, reply) {
 
     userRepository.createQueryBuilder('user')
         .insert()
-        .values(payload)
-        .returning('id, token')
+        .values({
+            ...payload,
+            password: await Bcrypt.hash(payload.password, 10)
+        })
+        .returning('*')
         .execute()
         .then(([user]) => {
             if (!user) {
                 throw Boom.internal();
             }
-            reply(user);
+            reply(_login(user));
         })
         .catch(reply);
 };
@@ -47,11 +76,14 @@ export const postPurchase = async function (request, reply) {
     }).min(1);
 
     const { error, value: list } = listSchema.validate(request.payload.list);
-    if (error) return reply(Boom.badRequest(<any>error));
+    if (error) {
+        return reply(Boom.badRequest(<any>error));
+    }
 
     const verify: Verify = Crypto.createVerify('RSA-SHA1');
     verify.update(request.payload.list);
-    const publicKey: string = request.auth.credentials.user.publicKey;
+    const user = await request.getRequestUser();
+    const publicKey: string = user.publicKey;
     let valid = false;
     try {
         valid = verify.verify(publicKey, request.payload.signature, 'base64');
@@ -84,7 +116,7 @@ export const postPurchase = async function (request, reply) {
     }
     total = total.toString();
 
-    processPayment(request, products, total)
+    processPayment(request, user, products, total)
         .then(reply, reply);
 };
 
@@ -106,7 +138,7 @@ export const getPurchase = async function(request, reply) {
 };
 
 export const getPurchases = async function(request, reply) {
-    const user: User = request.auth.credentials.user;
+    const user: User = await request.getRequestUser();
     const purchases = await user.purchases || [];
     reply(purchases);
 };

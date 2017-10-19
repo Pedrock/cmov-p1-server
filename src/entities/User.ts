@@ -6,8 +6,11 @@ export class User {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column('uuid', { unique: true, default: () => 'gen_random_uuid()' })
-    token: string;
+    @Column({ unique: true })
+    username: string;
+
+    @Column()
+    password: string;
 
     @Column()
     name: string;

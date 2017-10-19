@@ -14,9 +14,9 @@ export const camelCaseObject = function (object: Object) {
     }, {});
 };
 
-export const processPayment = async function(request: Request, products: Product[], total: string) {
-    const user: User = request.auth.credentials.user;
+export const processPayment = async function(request: Request, user: User, products: Product[], total: string) {
     const expiration = moment(user.creditCardExpiration).endOf('month');
+
     if (moment().isAfter(expiration)) {
         throw Boom.badData('Credit card has expired');
     }

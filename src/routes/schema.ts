@@ -3,8 +3,17 @@ import * as JoiDateExtensions from 'joi-date-extensions';
 import JoiNifExtension from '../lib/joi-nif-extension';
 const Joi = BaseJoi.extend(<any>[JoiDateExtensions, JoiNifExtension]);
 
+export const login = {
+    payload: {
+        username: Joi.string().required(),
+        password: Joi.string().required()
+    }
+};
+
 export const register = {
     payload: {
+        username: Joi.string().required(),
+        password: Joi.string().required(),
         name: Joi.string().required(),
         address: Joi.string().required(),
         fiscal_number: Joi.string().nif().required(),
