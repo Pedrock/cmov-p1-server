@@ -16,11 +16,11 @@ export const register = {
         password: Joi.string().required(),
         name: Joi.string().required(),
         address: Joi.string().required(),
-        fiscal_number: Joi.string().nif().required(),
-        credit_card_number: Joi.string().creditCard().required(),
+        fiscal_number: Joi.string().nif().required().example('123456789'),
+        credit_card_number: Joi.string().creditCard().required().example('347126431469340'),
         credit_card_type: Joi.string().valid('visa', 'mastercard', 'american express').required(),
-        credit_card_expiration: Joi.date().format('YYYY-MM'),
-        credit_card_cvv: Joi.string().regex(/^[0-9]{3}$/, 'CVV').required(),
+        credit_card_expiration: Joi.date().format('YYYY-MM').required().example('2020-01'),
+        credit_card_cvv: Joi.string().regex(/^[0-9]{3}$/, 'CVV').required().example('123'),
         public_key: Joi.string().required()
     }
 };
@@ -28,19 +28,19 @@ export const register = {
 export const getProduct = {
     query: Joi.object().keys({
         id: Joi.number().integer(),
-        barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode')
+        barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode').example('61234567890')
     }).xor('id', 'barcode')
 };
 
 export const postPurchase = {
     payload: {
-        list: Joi.string().required(),
+        list: Joi.string().required().example('[]'),
         signature: (<any>Joi.string()).base64().required()
     }
 };
 
 export const getPurchase = {
     params: Joi.object().keys({
-        token: Joi.string().uuid('uuidv4')
+        token: Joi.string().uuid('uuidv4').required()
     })
 };

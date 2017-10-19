@@ -56,7 +56,13 @@ export const register = async function (request, reply) {
             }
             reply(_login(user));
         })
-        .catch(reply);
+        .catch((error) => {
+            if (error.constraint === 'uk_user_username') {
+                reply(Boom.conflict('Username already in use'));
+            } else {
+                reply(error);
+            }
+        });
 };
 
 export const getProduct = async function (request, reply) {
@@ -73,7 +79,7 @@ export const postPurchase = async function (request, reply) {
     const listSchema = Joi.array().items({
         barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode').required(),
         quantity: Joi.number().integer().positive().required()
-    }).min(1);
+    }).min(1).unique((a, b) => a.barcode === b.barcode);
 
     const { error, value: list } = listSchema.validate(request.payload.list);
     if (error) {
