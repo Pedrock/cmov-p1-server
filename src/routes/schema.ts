@@ -2,6 +2,13 @@ import * as BaseJoi from 'joi';
 import * as JoiDateExtensions from 'joi-date-extensions';
 import JoiNifExtension from '../lib/joi-nif-extension';
 const Joi = BaseJoi.extend(<any>[JoiDateExtensions, JoiNifExtension]);
+const Relish = require('relish')({
+    messages: {
+        'fiscal_number': 'Please enter a valid fiscal number',
+        'credit_card_number': 'Please enter a valid credit card number',
+        'credit_card_cvv': 'Please enter a valid credit card CVV'
+    }
+});
 
 export const login = {
     payload: {
@@ -11,6 +18,7 @@ export const login = {
 };
 
 export const register = {
+    failAction: Relish.failAction,
     payload: {
         username: Joi.string().required(),
         password: Joi.string().required(),
