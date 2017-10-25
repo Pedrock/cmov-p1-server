@@ -33,6 +33,15 @@ module.exports = {
             },
             {
                 method: 'POST',
+                path: '/products',
+                config: {
+                    tags: ['api'],
+                    handler: Handlers.getProducts,
+                    validate: Schema.getProducts
+                }
+            },
+            {
+                method: 'POST',
                 path: '/purchase',
                 config: {
                     tags: ['api'],

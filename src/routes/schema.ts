@@ -40,6 +40,12 @@ export const getProduct = {
     }).xor('id', 'barcode')
 };
 
+export const getProducts = {
+    payload: {
+        barcodes: Joi.array().items(Joi.string()).min(1).required().example(['61234567890', '12853478357', '83248709823'])
+    }
+};
+
 export const postPurchase = {
     payload: {
         list: Joi.string().required().example('[]'),

@@ -75,6 +75,16 @@ export const getProduct = async function (request, reply) {
         .then(reply, reply);
 };
 
+export const getProducts = async function (request, reply) {
+    const productRepository: Repository<Product> = request.getManager().getRepository(Product);
+    const { barcodes } = request.payload;
+    productRepository
+        .createQueryBuilder('product')
+        .where('barcode IN (:barcodes)', { barcodes })
+        .getMany()
+        .then(reply, reply);
+};
+
 export const postPurchase = async function (request, reply) {
     const listSchema = Joi.array().items({
         barcode: Joi.string().regex(/^[0-9]{11}$/, 'barcode').required(),
