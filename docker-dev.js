@@ -14,5 +14,4 @@ const run = function (command, callback) {
 
 run('docker network prune -f', () => {
     run(`docker-compose run -d -p ${process.env.DB_PORT || 5432}:5432 postgres`);
-    run(`docker-compose run -d -p ${process.env.REDIS_PORT || 5432}:6379 redis`);
 });

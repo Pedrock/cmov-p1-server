@@ -17,7 +17,6 @@ const manifest = {
         { plugin: 'hapi-auth-jwt2' },
         { plugin: './plugins/auth-wrapper' },
         { plugin: './plugins/db' },
-        { plugin: './plugins/redis' },
         { plugin: 'inert' },
         { plugin: 'vision' },
         { plugin: {
