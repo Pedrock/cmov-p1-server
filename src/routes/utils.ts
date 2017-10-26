@@ -18,10 +18,10 @@ export const processPayment = async function(request: Request, user: User, produ
     const expiration = moment(user.creditCardExpiration).endOf('month');
 
     if (moment().isAfter(expiration)) {
-        throw Boom.badData('Credit card has expired');
+        throw Boom.badData('Credit card has expired.');
     }
     if (Math.random() < request.server.settings.app.purchaseFailureRate) {
-        throw Boom.internal('Payment failed for unknown reason');
+        throw Boom.paymentRequired('Payment failed. Please try again.');
     }
 
     const purchaseRepository: Repository<Purchase> = Typeorm.getManager().getRepository(Purchase);
