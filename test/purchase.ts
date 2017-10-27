@@ -73,6 +73,7 @@ describe('buying:', async () => {
         const { statusCode, payload } = await server.inject(request);
         expect(statusCode).to.equal(200);
         expect(Object.keys(JSON.parse(payload))).to.equal(['id', 'token', 'products', 'total', 'date', 'user']);
+        expect(JSON.parse(payload).token).to.equal(purchaseToken);
     });
 
 });
