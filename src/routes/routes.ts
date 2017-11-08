@@ -32,7 +32,7 @@ module.exports = {
                 }
             },
             {
-                method: 'POST',
+                method: 'GET',
                 path: '/products',
                 config: {
                     tags: ['api'],

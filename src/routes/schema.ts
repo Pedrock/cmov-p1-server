@@ -41,8 +41,8 @@ export const getProduct = {
 };
 
 export const getProducts = {
-    payload: {
-        barcodes: Joi.array().items(Joi.string()).min(1).required().example(['61234567890', '12853478357', '83248709823'])
+    query: {
+        barcodes: Joi.string().regex(/^[0-9]{11}(,[0-9]{11})*$/).required().example('61234567890,12853478357,83248709823'),
     }
 };
 

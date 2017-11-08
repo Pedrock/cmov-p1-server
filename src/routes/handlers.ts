@@ -77,7 +77,7 @@ export const getProduct = async function (request, reply) {
 
 export const getProducts = async function (request, reply) {
     const productRepository: Repository<Product> = request.getManager().getRepository(Product);
-    const { barcodes } = request.payload;
+    const barcodes = request.query.barcodes.split(',');
     productRepository
         .createQueryBuilder('product')
         .where('barcode IN (:barcodes)', { barcodes })
