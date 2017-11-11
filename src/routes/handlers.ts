@@ -33,6 +33,8 @@ export const login = async function (request, reply) {
             if (!success) {
                 throw Boom.forbidden('Invalid username/password');
             }
+            user.publicKey = request.payload.public_key;
+            await userRepository.save(user);
             reply(_login(user));
         })
         .catch(reply);
@@ -143,7 +145,7 @@ export const getPurchase = async function(request, reply) {
         .select()
         .addSelect(['user.id', 'user.name', 'user.address', 'user.fiscalNumber'])
         .leftJoin('purchase.user', 'user')
-        .where("purchase.token = :token", { token: request.params.token })
+        .where('purchase.token = :token', { token: request.params.token })
         .getOne()
         .then((purchase) => {
             if (!purchase) {

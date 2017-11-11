@@ -13,7 +13,8 @@ const Relish = require('relish')({
 export const login = {
     payload: {
         username: Joi.string().required(),
-        password: Joi.string().required()
+        password: Joi.string().required(),
+        public_key: Joi.string().required()
     }
 };
 
