@@ -20,4 +20,6 @@ export class Product {
     @Column()
     model: string;
 
+    @Column()
+    description: string;
 }
