@@ -40,7 +40,7 @@ export const registrationRequest = () => {
 export const loginRequest = () => ({
     method: 'POST',
     url: '/api/auth/login',
-    payload: { username, password: 'password1' }
+    payload: { username, password: 'password1', public_key: publicKey }
 });
 
 describe('auth:', async () => {
