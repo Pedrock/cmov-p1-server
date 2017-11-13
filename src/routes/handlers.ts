@@ -69,7 +69,7 @@ export const register = async function (request, reply) {
 
 export const getProduct = async function (request, reply) {
     const productRepository: Repository<Product> = request.getManager().getRepository(Product);
-    productRepository.findOne(request.query)
+    productRepository.findOne(_.clone(request.query))
         .then(product => {
             if (!product) throw Boom.notFound('Product not found');
             return product;
