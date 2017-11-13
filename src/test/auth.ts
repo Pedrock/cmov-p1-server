@@ -46,7 +46,7 @@ export const loginRequest = () => ({
 describe('auth:', async () => {
 
     before(async () => {
-        server = await require('../src/server')();
+        server = await require('../server')();
     });
 
     it('user is registered', async () => {

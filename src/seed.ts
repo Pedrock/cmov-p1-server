@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import {createConnection, Connection} from 'typeorm';
-import {Product} from './src/entities/Product';
+import {Product} from './server/entities/Product';
 
 (async () => {
     const connection: Connection = await createConnection();

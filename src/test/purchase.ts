@@ -33,7 +33,7 @@ function signList(list) {
 describe('buying:', async () => {
 
     before(async () => {
-        server = await require('../src/server')();
+        server = await require('../server')();
         server.settings.app.purchaseFailureRate = 0;
 
         const { result } = await server.inject(registrationRequest());

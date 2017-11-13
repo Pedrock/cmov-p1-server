@@ -15,8 +15,8 @@ const manifest = {
     ],
     registrations: [
         { plugin: 'hapi-auth-jwt2' },
-        { plugin: './plugins/auth-wrapper' },
-        { plugin: './plugins/db' },
+        { plugin: './server/plugins/auth-wrapper' },
+        { plugin: './server/plugins/db' },
         { plugin: 'inert' },
         { plugin: 'vision' },
         { plugin: {
@@ -56,7 +56,7 @@ const manifest = {
             }
         },
         { plugin: {
-                register: './routes/routes',
+                register: './server/routes/routes',
                 routes: { prefix: '/api' }
             }
         }
@@ -98,3 +98,4 @@ if (!module.parent) {
 } else {
     module.exports = () => new Promise(startServer);
 }
+
